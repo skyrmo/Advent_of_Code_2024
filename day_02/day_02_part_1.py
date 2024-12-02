@@ -11,7 +11,7 @@ def parse_input(file_path):
             # 1. Read as a single string
             # return data
             # 2. Read as a list of lines
-            # return data.split('\n')
+            return data.split('\n')
             # 3. Read as a list of integers
             # return [int(line) for line in data.split('\n')]
             # 4. Read as a list of lists (e.g., for grid-like inputs)
@@ -26,7 +26,41 @@ def parse_input(file_path):
 
 def solve(input_data):
     # Implement solution here
-    pass
+    lines = [line.split(" ") for line in input_data]
+    result = 0
+
+
+    for line in lines:
+        is_safe = True
+        x, y = int(line[0]), int(line[1])
+
+        for i in range(1, len(line)):
+            a, b = int(line[i - 1]) , int(line[i])
+
+            if abs(a - b) < 1 or abs(a - b) > 3:
+                is_safe = False
+                break
+
+            if x > y:
+                    if a <= b:
+                        is_safe = False
+                        break
+
+            elif x < y:
+                    if a >= b:
+                        is_safe = False
+                        break
+
+            else:
+                is_safe = False
+                break
+
+        if is_safe:
+            result += 1
+
+    return result
+
+
 
 def main():
     # Get the directory of the current script
