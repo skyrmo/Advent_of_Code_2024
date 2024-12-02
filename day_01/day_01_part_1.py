@@ -11,7 +11,7 @@ def parse_input(file_path):
             # 1. Read as a single string
             # return data
             # 2. Read as a list of lines
-            # return data.split('\n')
+            return data.split('\n')
             # 3. Read as a list of integers
             # return [int(line) for line in data.split('\n')]
             # 4. Read as a list of lists (e.g., for grid-like inputs)
@@ -26,7 +26,19 @@ def parse_input(file_path):
 
 def solve(input_data):
     # Implement solution here
-    pass
+    l1, l2 = [], []
+    for line in input_data:
+        split_line = line.split("   ")
+        l1.append(int(split_line[0]))
+        l2.append(int(split_line[1]))
+
+    l1.sort()
+    l2.sort()
+    result = 0
+    for i in range(len(l1)):
+        result += abs(l2[i] - l1[i])
+
+    return result
 
 def main():
     # Get the directory of the current script
