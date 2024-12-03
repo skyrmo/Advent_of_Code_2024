@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 import os
 import sys
 
@@ -25,8 +26,43 @@ def parse_input(file_path):
         sys.exit(1)
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    instructions = []
+    include = True
+    result = 0
+
+    for i in range(len(input_data)):
+        if input_data[i:i + 4] == "do()":
+            instructions.append(True)
+        elif input_data[i:i + 7] == "don't()":
+            instructions.append(False)
+        elif input_data[i:i + 4] == "mul(":
+            j = i + 4
+            first_num = ''
+            second_num = ''
+            while input_data[j].isdigit():
+                first_num += input_data[j]
+                j += 1
+            if input_data[j] != ',':
+                continue
+
+            j += 1
+            while input_data[j].isdigit():
+                second_num += input_data[j]
+                j += 1
+
+            if input_data[j] != ')':
+                continue
+
+            instructions.append((int(first_num), int(second_num)))
+
+    for instruction in instructions:
+        if type(instruction) == bool:
+            include = instruction
+        elif include:
+            result += instruction[0] * instruction[1]
+
+    return result
+
 
 def main():
     # Get the directory of the current script
