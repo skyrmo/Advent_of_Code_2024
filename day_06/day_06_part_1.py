@@ -31,17 +31,15 @@ def solve(grid):
             if grid[r][c] == '^':
                 start_pos = (r, c)
                 break
+
     dir_idx = 0
-    dr, dc = dirs[dir_idx]
-
     q = collections.deque([start_pos])
-
     grid[start_pos[0]][start_pos[1]] = '.'
 
     while q:
-        r, c, _ = q.popleft()
-        # grid[r][c] = 'x'
-        visited.add((r, c, dir_idx))
+        r, c = q.popleft()
+
+        visited.add((r, c))
 
         nr = r + dirs[dir_idx][0]
         nc = c + dirs[dir_idx][1]
