@@ -1,4 +1,3 @@
-from curses.ascii import isdigit
 import os
 import sys
 
@@ -37,23 +36,24 @@ def solve(input_data):
             instructions.append(False)
         elif input_data[i:i + 4] == "mul(":
             j = i + 4
-            first_num = ''
-            second_num = ''
+            nums = ['', '']
+            # first_num = ''
+            # second_num = ''
             while input_data[j].isdigit():
-                first_num += input_data[j]
+                nums[0] += input_data[j]
                 j += 1
             if input_data[j] != ',':
                 continue
 
             j += 1
             while input_data[j].isdigit():
-                second_num += input_data[j]
+                nums[1] += input_data[j]
                 j += 1
 
             if input_data[j] != ')':
                 continue
 
-            instructions.append((int(first_num), int(second_num)))
+            instructions.append([int(x) for x in nums])
 
     for instruction in instructions:
         if type(instruction) == bool:
