@@ -17,6 +17,7 @@ def parse_input(file_path):
             # return [int(line) for line in data.split('\n')]
             # 4. Read as a list of lists (e.g., for grid-like inputs)
             # return [list(line) for line in data.split('\n')]
+            #
             return data
     except FileNotFoundError:
         print(f"Error: File {file_path} not found.")

@@ -65,7 +65,7 @@ env/
 ''')
 
     # Create structure for days 1-25
-    for day in range(4, 26):
+    for day in range(1, 26):
         # Use zero-padding for day numbers
         padded_day = f'{day:02d}'
 

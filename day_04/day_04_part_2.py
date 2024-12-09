@@ -1,4 +1,3 @@
-
 import os
 
 def parse_input(file_path):
@@ -14,13 +13,25 @@ def parse_input(file_path):
         # return [int(line) for line in data.split('\n')]
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
-        # return [list(line) for line in data.split('\n')]
+        return [list(line) for line in data.split('\n')]
 
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    grid = input_data
+    h, w = len(grid), len(grid[0])
+    result = 0
+
+    for r in range(1, h - 1):
+        for c in range(1, w - 1):
+            if grid[r][c] == 'A':
+                group_one = [grid[r-1][c-1], grid[r+1][c+1]]
+                group_two = [grid[r+1][c-1], grid[r-1][c+1]]
+
+                if 'M' in group_one and 'S' in group_one and 'M' in group_two and 'S' in group_two:
+                   result += 1
+
+    return result
 
 def main():
     # Get the directory of the current script
