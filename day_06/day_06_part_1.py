@@ -1,5 +1,5 @@
-
 import os
+import collections
 
 def parse_input(file_path):
     # Parse the input file
@@ -14,13 +14,50 @@ def parse_input(file_path):
         # return [int(line) for line in data.split('\n')]
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
-        # return [list(line) for line in data.split('\n')]
+        return [list(line) for line in data.split('\n')]
 
         return data
 
-def solve(input_data):
-    # Implement solution here
-    pass
+def solve(grid):
+    h, w = len(grid), len(grid[0])
+    start_pos = (-1, -1)
+
+    dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+
+    visited = set()
+
+    for r in range(h):
+        for c in range(w):
+            if grid[r][c] == '^':
+                start_pos = (r, c)
+                break
+    dir_idx = 0
+    dr, dc = dirs[dir_idx]
+
+    q = collections.deque([start_pos])
+
+    grid[start_pos[0]][start_pos[1]] = '.'
+
+    while q:
+        r, c, _ = q.popleft()
+        # grid[r][c] = 'x'
+        visited.add((r, c, dir_idx))
+
+        nr = r + dirs[dir_idx][0]
+        nc = c + dirs[dir_idx][1]
+
+        if 0 <= nr < h and 0 <= nc < w and grid[nr][nc] == '.':
+            q.append((nr, nc))
+
+        elif 0 <= nr < h and 0 <= nc < w and grid[nr][nc] == '#':
+            dir_idx = (dir_idx + 1) % 4
+            nr = r + dirs[dir_idx][0]
+            nc = c + dirs[dir_idx][1]
+            if 0 <= nr < h and 0 <= nc < w and grid[nr][nc] == '.':
+                q.append((nr, nc))
+
+    return len(visited)
+
 
 def main():
     # Get the directory of the current script
