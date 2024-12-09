@@ -1,5 +1,5 @@
-
 import os
+import collections
 
 def parse_input(file_path):
     # Parse the input file
@@ -14,13 +14,33 @@ def parse_input(file_path):
         # return [int(line) for line in data.split('\n')]
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
-        # return [list(line) for line in data.split('\n')]
+        return [list(line) for line in data.split('\n')]
 
         return data
 
-def solve(input_data):
-    # Implement solution here
-    pass
+def solve(grid):
+    h, w = len(grid), len(grid[0])
+    pairs = collections.defaultdict(list)
+    unique_pos = set()
+
+    for r in range(h):
+        for c in range(w):
+            char = grid[r][c]
+            if char != '.':
+                pairs[char].append((r, c))
+
+    for char in pairs:
+        for i in range(len(pairs[char])):
+            for j in range(len(pairs[char])):
+                if i != j:
+                    ar, ac = pairs[char][i]
+                    br, bc = pairs[char][j]
+                    cr, cc = br - (ar - br), bc - (ac - bc)
+                    if 0 <= cr < h and 0 <= cc < w:
+                        unique_pos.add((cr, cc))
+
+    return len(unique_pos)
+
 
 def main():
     # Get the directory of the current script
