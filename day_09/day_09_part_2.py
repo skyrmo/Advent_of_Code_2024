@@ -39,10 +39,11 @@ def solve(input_data):
                 arr.append(-1)
         idx += num
 
-
+    # uses q queue and two pointers.
     while q:
         num, idx, repeat = q.popleft()
 
+        # using a window to keep trak of the number of spaces
         window_space_count = len([x for x in arr[:repeat] if x == -1])
 
         for i in range(min(len(arr) - repeat, idx)):
