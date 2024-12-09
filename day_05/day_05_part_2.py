@@ -52,22 +52,12 @@ def solve(input_data):
 
     # Sort thr updates that are not sorted
     adj = collections.defaultdict(list)
-    in_degree = collections.defaultdict(int)
-    out_degree = collections.defaultdict(int)
     for a, b in rules:
         adj[a].append(b)
-        in_degree[b] += 1
-        out_degree[a] += 1
 
-    print(adj)
-    # print(incorrect_updates)
 
     for update in incorrect_updates:
         update_values = set(update)
-
-        start_node = [x for x in update if x not in in_degree]
-
-        print(update, start_node)
 
         for start_val in update:
             q = collections.deque([(start_val, [start_val])])
@@ -83,32 +73,6 @@ def solve(input_data):
                         path_copy = path.copy()
                         path_copy.append(nbr)
                         q.append((nbr, path_copy))
-        print("_____________")
-
-
-    # # Sort thr updates that are not sorted
-    # adj = collections.defaultdict(list)
-    # for a, b in rules:
-    #     adj[b].append(a)
-
-    # for update in incorrect_updates:
-    #     update_values = set(update)
-
-    #     for start_val in update:
-    #         q = collections.deque([(start_val, [start_val])])
-
-    #         while q:
-    #             node, path = q.popleft()
-    #             if len(path) == len(update):
-    #                 result += path[len(path)//2]
-    #                 continue
-
-    #             for nbr in adj[node]:
-    #                 if nbr in update_values:
-    #                     path_copy = path.copy()
-    #                     path_copy.append(nbr)
-    #                     q.append((nbr, path_copy))
-    #     print("_____________")
 
     return result
 
