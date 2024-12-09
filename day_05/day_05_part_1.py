@@ -1,5 +1,5 @@
-
 import os
+import collections
 
 def parse_input(file_path):
     # Parse the input file
@@ -15,12 +15,37 @@ def parse_input(file_path):
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
         # return [list(line) for line in data.split('\n')]
+        #
+        # 5. split into two sections
+        return data.split('\n\n')
 
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    rules, updates = [data.split("\n") for data in input_data]
+    rules = [[int(rule.split("|")[0]), int(rule.split("|")[1])] for rule in rules]
+    updates = [[int(x) for x in update.split(",")] for update in updates]
+    result = 0
+
+    requirments = collections.defaultdict(set)
+    for a, b in rules:
+        requirments[a].add(b)
+
+    for update in updates:
+        seen = set()
+        should_update = True
+        for val in update:
+            if any([req in seen for req in requirments[val]]):
+                should_update = False
+                break
+            else:
+                seen.add(val)
+
+        if should_update:
+            result += update[len(update)//2]
+
+
+    return result
 
 def main():
     # Get the directory of the current script

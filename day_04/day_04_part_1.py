@@ -30,25 +30,19 @@ def solve(input_data):
                     nr = r + dr
                     nc = c + dc
 
-                    if nr < 0 or nr >= h or nc < 0 or nc >= w:
-                        continue
-                    if grid[nr][nc] != 'M':
+                    if (nr < 0 or nr >= h or nc < 0 or nc >= w) or grid[nr][nc] != 'M':
                         continue
 
-                    nr_3 = nr + dr
-                    nc_3 = nc + dc
+                    nr += dr
+                    nc += dc
 
-                    if nr_3 < 0 or nr_3 >= h or nc_3 < 0 or nc_3 >= w:
-                        continue
-                    if grid[nr_3][nc_3] != 'A':
+                    if (nr < 0 or nr >= h or nc < 0 or nc >= w) or grid[nr][nc] != 'A':
                         continue
 
-                    nr_4 = nr_3 + dr
-                    nc_4 = nc_3 + dc
+                    nr += dr
+                    nc += dc
 
-                    if nr_4 < 0 or nr_4 >= h or nc_4 < 0 or nc_4 >= w:
-                        continue
-                    if grid[nr_4][nc_4] != 'S':
+                    if (nr < 0 or nr >= h or nc < 0 or nc >= w) or grid[nr][nc] != 'S':
                         continue
 
                     result += 1
