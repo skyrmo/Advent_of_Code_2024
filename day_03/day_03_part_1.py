@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 
 def parse_input(file_path):
     # Parse the input file
@@ -25,8 +26,13 @@ def parse_input(file_path):
         sys.exit(1)
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    result = 0
+    pattern = r'mul\((\d{1,3}),(\d{1,3})\)'
+    matches = re.findall(pattern, input_data)
+    print(matches)
+    for match in matches:
+        result += int(match[0]) * int(match[1])
+    return result
 
 def main():
     # Get the directory of the current script
