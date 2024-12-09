@@ -19,8 +19,43 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    data = [int(x) for x in list(input_data)]
+
+    arr = []
+
+
+    for i, num in enumerate(data):
+        for _ in range(num):
+            if i % 2 == 0:
+                arr.append(i// 2)
+            else:
+                arr.append(-1)
+
+    l = 0
+    r = len(arr) - 1
+
+    while l < r:
+        while arr[l] >= 0:
+            l += 1
+
+        while arr[r] < 0:
+            r-= 1
+
+        if l >= r:
+            break
+
+        arr[l], arr[r] = arr[r], arr[l]
+
+        l += 1
+        r -= 1
+
+    result = 0
+    for i, num in enumerate(arr):
+        if num >= 0:
+            result += i * num
+
+    return result
+
 
 def main():
     # Get the directory of the current script

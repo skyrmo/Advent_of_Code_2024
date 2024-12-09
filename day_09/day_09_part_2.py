@@ -1,5 +1,6 @@
-
 import os
+import collections
+
 
 def parse_input(file_path):
     # Parse the input file
@@ -19,8 +20,49 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    data = [int(x) for x in list(input_data)]
+
+    arr = []
+    q = collections.deque()
+
+    idx = 0
+    for i, num in enumerate(data):
+        if num == 0:
+            idx += num
+            continue
+
+        q.appendleft((i//2, idx, num))
+        for _ in range(num):
+            if i % 2 == 0:
+                arr.append(i// 2)
+            else:
+                arr.append(-1)
+        idx += num
+
+
+    while q:
+        num, idx, repeat = q.popleft()
+
+        window_space_count = len([x for x in arr[:repeat] if x == -1])
+
+        for i in range(min(len(arr) - repeat, idx)):
+            if window_space_count == repeat:
+                for j in range(repeat):
+                    arr[i + j], arr[idx + j] = arr[idx + j], arr[i + j]
+                break
+
+            if arr[i] == -1:
+                window_space_count -= 1
+            if arr[i + repeat] == -1:
+                window_space_count += 1
+
+
+    result = 0
+    for i, num in enumerate(arr):
+        if num >= 0:
+            result += i * num
+
+    return result
 
 def main():
     # Get the directory of the current script
