@@ -19,8 +19,32 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    nums = [int(x) for x in input_data.split(" ")]
+    memo = {}
+
+    def dp(num, itr):
+        if (num, itr) in memo:
+            return memo[(num, itr)]
+
+        if num == 0:
+            products = [1]
+
+        elif len(str(num)) % 2 == 0:
+            products = [int(str(num)[:len(str(num)) // 2]), int(str(num)[len(str(num)) // 2:])]
+
+
+        else:
+            products = [num * 2024]
+
+        if itr == 0:
+            return len(products)
+
+        result = sum([dp(n, itr - 1) for n in products])
+
+        memo[(num, itr)] = result
+        return result
+
+    return sum([dp(num, 74) for num in nums])
 
 def main():
     # Get the directory of the current script

@@ -1,10 +1,13 @@
 import os
+
+
 def create_aoc_project_structure():
     # Create project structure for days 1 through 25.
     # Template for the Python script
     def get_script_template(day, part):
         return f'''
 import os
+import collections
 
 def parse_input(file_path):
     # Parse the input file
@@ -44,6 +47,7 @@ def main():
 if __name__ == '__main__':
     main()
 '''
+
     # Create .gitignore at the project root
     with open('.gitignore', 'w') as gitignore:
         gitignore.write('''# Ignore input text files for each day
@@ -88,6 +92,7 @@ env/
             f.write('# Paste your Advent of Code input here')
 
     print("Advent of Code project structure created successfully!")
+
 
 # Run the function to create the structure
 if __name__ == '__main__':

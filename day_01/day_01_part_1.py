@@ -1,28 +1,22 @@
 import os
 import sys
 
+
 def parse_input(file_path):
-    # Parse the input file
-    try:
-        with open(file_path, 'r') as file:
-            # Read the entire file
-            data = file.read().strip()
-            # Choose one of these parsing methods based on input format
-            # 1. Read as a single string
-            # return data
-            # 2. Read as a list of lines
-            return data.split('\n')
-            # 3. Read as a list of integers
-            # return [int(line) for line in data.split('\n')]
-            # 4. Read as a list of lists (e.g., for grid-like inputs)
-            # return [list(line) for line in data.split('\n')]
-            return data
-    except FileNotFoundError:
-        print(f"Error: File {file_path} not found.")
-        sys.exit(1)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
+    with open(file_path, 'r') as file:
+        # Read the entire file
+        data = file.read().strip()
+        # Choose one of these parsing methods based on input format
+        # 1. Read as a single string
+        # return data
+        # 2. Read as a list of lines
+        return data.split('\n')
+        # 3. Read as a list of integers
+        # return [int(line) for line in data.split('\n')]
+        # 4. Read as a list of lists (e.g., for grid-like inputs)
+        # return [list(line) for line in data.split('\n')]
+        # return data
+
 
 def solve(input_data):
     # Implement solution here
@@ -40,6 +34,7 @@ def solve(input_data):
 
     return result
 
+
 def main():
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -53,6 +48,7 @@ def main():
     # Solve and print the solution
     result = solve(parsed_input)
     print(f"Solution for Day 01, Part One: {result}")
+
 
 if __name__ == '__main__':
     main()

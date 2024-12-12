@@ -1,4 +1,4 @@
-
+import collections
 import os
 
 def parse_input(file_path):
@@ -14,13 +14,38 @@ def parse_input(file_path):
         # return [int(line) for line in data.split('\n')]
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
-        # return [list(line) for line in data.split('\n')]
+        return [[int(x) for x in list(line)] for line in data.split('\n')]
 
         return data
 
-def solve(input_data):
-    # Implement solution here
-    pass
+def solve(grid):
+    h, w = len(grid), len(grid[0])
+    result = 0
+
+    def search_trail(start_pos):
+        q = collections.deque()
+        q.append(start_pos)
+        visited = set()
+
+        while q:
+            r, c = q.popleft()
+
+            if grid[r][c] == 9:
+                visited.add((r, c))
+                continue
+
+            for nr, nc in ((r - 1, c), (r, c + 1),(r + 1, c),(r, c - 1)):
+                if 0 <= nr < h and 0 <= nc < w and grid[nr][nc] == grid[r][c] + 1:
+                    q.append((nr, nc))
+
+        return len(visited)
+
+    for r in range(h):
+        for c in range(w):
+            if grid[r][c] == 0:
+                result += search_trail((r, c))
+
+    return result
 
 def main():
     # Get the directory of the current script
