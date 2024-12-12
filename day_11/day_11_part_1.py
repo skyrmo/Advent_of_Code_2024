@@ -31,7 +31,7 @@ def solve(input_data):
             products = [1]
 
         elif len(str(num)) % 2 == 0:
-            products = [int(str(num)[:len(str(num)) // 2]), int(str(num)[len(str(num)) // 2:])]
+            products = [int(str(num)[:len(str(num))//2]), int(str(num)[len(str(num))//2:])]
 
 
         else:
