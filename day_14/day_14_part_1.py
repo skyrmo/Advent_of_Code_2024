@@ -1,5 +1,6 @@
-
 import os
+import collections
+from itertools import product
 
 def parse_input(file_path):
     # Parse the input file
@@ -8,7 +9,7 @@ def parse_input(file_path):
         data = file.read().strip()
 
         # 2. Read as a list of lines
-        # return data.split('\n')
+        return data.split('\n')
 
         # 3. Read as a list of integers
         # return [int(line) for line in data.split('\n')]
@@ -19,8 +20,48 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    h, w = 103, 101
+    num_iters = 100
+
+    robots = []
+    for line in input_data:
+        robot = []
+        p, v = line.split(" ")
+        robot.append([int(x) for x in p.split("=")[1].split(",")])
+        robot.append([int(x) for x in v.split("=")[1].split(",")])
+        robots.append(robot)
+
+    quads = [0] * 4
+
+    for robot in robots:
+        # print(robot)
+        p_x, p_y = robot[0]
+        v_x, v_y = robot[1]
+
+        p_x += v_x * num_iters
+        p_y += v_y * num_iters
+
+        p_x = p_x % w
+        p_y = p_y % h
+
+        if p_y < h //2:
+            if p_x < w //2:
+                quads[0] += 1
+            elif p_x > (w //2):
+                quads[1] += 1
+
+        elif p_y > (h // 2):
+            if p_x < w //2:
+                quads[2] += 1
+            elif p_x > (w //2):
+                quads[3] += 1
+
+    result = 1
+    for val in quads:
+        result *= val
+
+    return result
+
 
 def main():
     # Get the directory of the current script

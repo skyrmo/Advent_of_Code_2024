@@ -1,6 +1,5 @@
 import collections
 import os
-from email.policy import default
 
 def parse_input(file_path):
     # Parse the input file
