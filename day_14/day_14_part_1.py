@@ -1,6 +1,4 @@
 import os
-import collections
-from itertools import product
 
 def parse_input(file_path):
     # Parse the input file

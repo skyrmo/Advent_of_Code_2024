@@ -1,5 +1,4 @@
 import os
-import collections
 import time
 
 def parse_input(file_path):
@@ -21,8 +20,6 @@ def parse_input(file_path):
 
 def solve(input_data):
     h, w = 103, 101
-    num_iters = 100
-
 
     robots = []
     for line in input_data:
@@ -48,10 +45,10 @@ def solve(input_data):
 
             grid[p_y][p_x] += 1
 
-        print(f"__iter:{i}__________________________\n")
+        # print(f"__iter:{i}__________________________\n")
         for row in grid:
             print("".join([str(x) if x > 0 else '.' for x in row]))
-        print(f"____________________________________\n")
+        # print(f"____________________________________\n")
         time.sleep(0.06)
 
 
