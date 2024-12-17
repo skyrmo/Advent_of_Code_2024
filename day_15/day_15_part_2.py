@@ -1,4 +1,5 @@
 import os
+import collections
 
 
 def parse_input(file_path):
@@ -42,92 +43,44 @@ def solve(input_data):
                 grid[r][c * 2] = '['
                 grid[r][c * 2 + 1] = ']'
 
-    # def move_left(r, c):
-    #     pos_to_check = [(r, c - 1)]
-    #
-    #     while pos_to_check:
-    #         nr, nc = pos_to_check.pop()
-    #
-    #         if grid[nr][nc] == '#':
-    #             return r, c
-    #
-    #         elif grid[nr][nc] == ']':
-    #             pos_to_check.append((nr, nc - 2))
-    #
-    #         elif grid[nr][nc] == '.':
-    #             for i in range(nc, c - 1):
-    #                 grid[r][i] = grid[r][i + 1]
-    #             grid[r][c] = '.'
-    #             grid[r][c - 1] = '@'
-    #             return r, c - 1
-
-    # def move_right(r, c):
-    #     pos_to_check = [(r, c + 1)]
-    #
-    #     while pos_to_check:
-    #         nr, nc = pos_to_check.pop()
-    #         print(nr, nc)
-    #
-    #         if grid[nr][nc] == '#':
-    #             return r, c
-    #
-    #         elif grid[nr][nc] == '[':
-    #             pos_to_check.append((nr, nc + 2))
-    #
-    #         elif grid[nr][nc] == '.':
-    #             for i in range(nc, c, -1):
-    #                 grid[r][i] = grid[r][i - 1]
-    #             grid[r][c] = '.'
-    #             grid[r][c + 1] = '@'
-    #             return r, c + 1
-
-    def move_up(r, c):
-        pos_to_check = [(r - 1, c)]
-        moves = []
-        # seen = set([(r, c)])
-
-        while pos_to_check:
-            nr, nc = pos_to_check.pop()
+    r, c = start_pos
+    for move in moves:
+        dr, dc = dirs[move]
+        targets = [(r, c)]
+        valid_move = True
+        for cr, cc in targets:
+            nr = cr + dr
+            nc = cc + dc
+            if (nr, nc) in targets:
+                continue
 
             if grid[nr][nc] == '#':
-                return r, c
+                valid_move = False
+                break
 
-            elif grid[nr][nc] == '[':
-                pos_to_check.append((nr, nc))
-                pos_to_check.append((nr, nc + 1))
-                moves.append((nr, nc))
+            if grid[nr][nc] == ']':
+                targets.append((nr, nc))
+                targets.append((nr, nc - 1))
 
-            elif grid[nr][nc] == ']':
-                pos_to_check.append((nr, nc))
-                pos_to_check.append((nr, nc - 1))
-                moves.append((nr, nc - 1))
+            if grid[nr][nc] == '[':
+                targets.append((nr, nc))
+                targets.append((nr, nc + 1))
 
-        # while moves:
-        #     (fr, fc), (tr, tc) = moves.pop()
-        #     grid[tr][tc] = grid[fr][fc]
+        if not valid_move:
+            continue
 
-        # grid[r][c] = '.'
-        return r - 1, c
+        grid_copy = [list(row) for row in grid]
 
-    r, c = start_pos
-    for move_no, move in enumerate(moves):
-        # print(f"Move:{move_no + 1}-{move}---------")
-        # for row in grid:
-        #     print("".join(row))
+        for br, bc in targets[1:]:
+            grid[br][bc] = '.'
+        grid[r][c] = '.'
+        grid[r + dr][c + dc] = '@'
+        for br, bc in targets[1:]:
+            grid[br + dr][bc + dc] = grid_copy[br][bc]
+        r += dr
+        c += dc
 
-        if move == 0:
-            r, c = move_up(r, c)
-
-        # if move == 1:
-        #     r, c = move_right(r, c)
-        # elif move == 2:
-        #     r, c = move_down(r, c)
-        # if move == 3:
-        #     r, c = move_left(r, c)
-
-        # for row in grid:
-        #     print("".join(row))
-        # print(f"------------------------\n")
+    print(sum(100 * r + c for r in range(len(grid)) for c in range(len(grid[0])) if grid[r][c] == '['))
 
 
 def main():

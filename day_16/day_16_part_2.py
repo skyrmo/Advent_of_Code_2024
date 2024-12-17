@@ -1,7 +1,6 @@
 import os
 import heapq
 import collections
-from test.test_math import INF
 
 
 def parse_input(file_path):
@@ -63,7 +62,6 @@ def solve(grid):
             backtrack[(nr, nc, ndr, ndc)].add((r, c, dr, dc))
             heapq.heappush(q, (new_score, nr, nc, ndr, ndc))
 
-    # print(end_states)
     states = collections.deque(end_states)
     seen = set(end_states)
 
