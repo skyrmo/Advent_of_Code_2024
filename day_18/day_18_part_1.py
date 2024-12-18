@@ -1,4 +1,5 @@
 
+import collections
 import os
 
 def parse_input(file_path):
@@ -8,7 +9,7 @@ def parse_input(file_path):
         data = file.read().strip()
 
         # 2. Read as a list of lines
-        # return data.split('\n')
+        return data.split('\n')
 
         # 3. Read as a list of integers
         # return [int(line) for line in data.split('\n')]
@@ -19,8 +20,39 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    bytes = [(int(line.split(",")[0]), int(line.split(",")[1])) for line in input_data]
+    print(bytes)
+
+    h, w = 71, 71
+    grid = [[float('inf')] * w for _ in range(h)]
+
+    for i in range(1024):
+        c, r = bytes[i]
+        grid[r][c] = 0
+
+
+
+    # start_pos = (0, 0)
+    # end = (h-1, w-1)
+
+    q = collections.deque([(0, 0, 0)])
+    grid[0][0] = 0
+    while q:
+        r, c, steps = q.popleft()
+
+        if r == h - 1 and c == w - 1:
+            return steps
+
+        for nr, nc in ((r - 1, c), (r, c + 1), (r + 1, c), (r, c - 1)):
+            if 0 <= nr < h and 0 <= nc < w and steps + 1 < grid[nr][nc]:
+                q.append((nr, nc, steps + 1))
+                grid[nr][nc] = steps + 1
+
+    for row in grid:
+        print(*row, sep=' ')
+
+
+
 
 def main():
     # Get the directory of the current script
