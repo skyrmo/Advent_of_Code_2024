@@ -11,7 +11,7 @@ def parse_input(file_path):
         # return data.split('\n')
 
         # 3. Read as a list of integers
-        # return [int(line) for line in data.split('\n')]
+        return [int(line) for line in data.split('\n')]
 
         # 4. Read as a list of lists (e.g., for grid-like inputs)
         # return [list(line) for line in data.split('\n')]
@@ -19,8 +19,32 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+
+    def process(secret_num):
+        secret_num_by_64 = secret_num * 64
+        secret_num = secret_num ^ secret_num_by_64
+        secret_num = secret_num % 16777216
+
+        secret_num_d_32 = secret_num // 32
+        secret_num = secret_num ^ secret_num_d_32
+        secret_num = secret_num % 16777216
+
+        secret_num_by_2024 = secret_num * 2048
+        secret_num = secret_num ^ secret_num_by_2024
+        secret_num = secret_num % 16777216
+
+        return secret_num
+
+    result = 0
+    for num in input_data:
+        # print(num)
+        secret_num = num
+        for _ in range(2000):
+            secret_num = process(secret_num)
+        result += secret_num
+    return result
+
+
 
 def main():
     # Get the directory of the current script
