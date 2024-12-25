@@ -39,15 +39,16 @@ def solve(input_data):
 
     for user_id, secret_num in enumerate(input_data):
         secret_nums = [secret_num]
-        prices = [int(str(secret_num)[-1:])]
+        prices = [secret_num % 10]
         changes = []
+        seen_prices = set()
 
 
         for i in range(2000):
             secret_num = process(secret_num)
             secret_nums.append(secret_num)
 
-            price = int(str(secret_num)[-1:])
+            price = secret_num % 10
 
             changes.append(price - prices[-1])
 
@@ -57,6 +58,8 @@ def solve(input_data):
             last_4_changes = tuple(changes[p - 4:p])
             if last_4_changes not in user_zips[user_id]:
                 user_zips[user_id][last_4_changes] = prices[p]
+                seen_prices.add(prices[p])
+
 
     all_seqs = set()
 
