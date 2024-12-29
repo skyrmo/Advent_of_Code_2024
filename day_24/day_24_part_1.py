@@ -1,6 +1,6 @@
 from collections import defaultdict
 import os
-from re import A
+
 
 def parse_input(file_path):
     # Parse the input file
@@ -54,31 +54,7 @@ def solve(input_data):
 
         return values[val]
 
-    # print(sorted([(k, 1 if v else 0) for k, v in values.items() if k[0] == 'z'], reverse = True))
     print(int("".join(['1' if process(z) else '0' for z in sorted(set(zeds), reverse=True)]), 2))
-    # print(['1' if process(z) else '0' for z in sorted(set(zeds), reverse=True)])
-
-
-    # print(*instructions.items(), sep="\n")
-    # while instructions:
-    #     nxt_lvl = []
-    #     for (a, b), v in instructions.items():
-    #         if a in values and b in values:
-    #             # print(a, b, v, (a in values and b in values))
-    #             op, res = v
-    #             if op == 'AND':
-    #                 nxt_lvl.append(((a, b), res, values[a] and values[b]))
-    #             elif op == 'OR':
-    #                 nxt_lvl.append(((a, b), res, values[a] or values[b]))
-    #             elif op == 'XOR':
-    #                 nxt_lvl.append(((a, b), res, values[a] != values[b]))
-
-        # for key, res, val in nxt_lvl:
-        #     values[res] = val
-        #     del instructions[key]
-
-    # print(values)
-
 
 
 

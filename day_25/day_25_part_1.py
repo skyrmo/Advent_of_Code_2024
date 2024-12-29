@@ -8,7 +8,7 @@ def parse_input(file_path):
         data = file.read().strip()
 
         # 2. Read as a list of lines
-        # return data.split('\n')
+        return data.split('\n\n')
 
         # 3. Read as a list of integers
         # return [int(line) for line in data.split('\n')]
@@ -19,8 +19,42 @@ def parse_input(file_path):
         return data
 
 def solve(input_data):
-    # Implement solution here
-    pass
+    # print(input_data)
+
+    keys = []
+    locks = []
+    for section in input_data:
+        grid = [list(line) for line in section.split('\n')]
+        if all([x =='#' for x in grid[6]]):
+            key = [0] * 5
+            for r in range(7 -1, -1, -1):
+                for c in range(5):
+                    if grid[r][c] == '#':
+                        key[c] = 7 - r - 1
+
+            keys.append(key)
+        else:
+            lock = [0] * 5
+            for r in range(7):
+                for c in range(5):
+                    if grid[r][c] == '#':
+                        lock[c] = r
+
+            locks.append(lock)
+
+    #     for row in grid:
+    #         print(row)
+    #     print("_____________")
+    # print(locks)
+    # print(keys)
+    result = 0
+    for lock in locks:
+        for key in keys:
+            for i in range(5):
+                if key[i] +  lock[i] >= 6:
+                    result += 1
+                    break
+    return result
 
 def main():
     # Get the directory of the current script

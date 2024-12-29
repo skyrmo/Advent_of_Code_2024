@@ -1,4 +1,7 @@
+from functools import cache
 import os
+from collections import defaultdict, deque
+from itertools import product
 
 
 def parse_input(file_path):
@@ -20,122 +23,83 @@ def parse_input(file_path):
 
 
 def solve(input_data):
-    # numpad = {
-    #     0: [3, 1],
-    #     1: [2, 0],
-    #     2: [2, 1],
-    #     3: [2, 2],
-    #     4: [1, 0],
-    #     5: [1, 1],
-    #     6: [1, 2],
-    #     7: [0, 0],
-    #     8: [0, 1],
-    #     9: [0, 2],
-    #     'A': [3, 2]
-    # }
+    num_keypad = [
+        ['7', '8', '9'],
+        ['4', '5', '6'],
+        ['1', '2', '3'],
+        [None, '0', 'A']
+    ]
 
-    # dirpad = {
-    #     '^': [0, 1],
-    #     '>': [1, 2],
-    #     'v': [1, 1],
-    #     '<': [1, 0],
-    #     'A': [0, 2]
-    # }
-    num_moves = {
-        0: ['', '^<', '^', '^>']
-        1: [2, 0],
-        2: [2, 1],
-        3: [2, 2],
-        4: [1, 0],
-        5: [1, 1],
-        6: [1, 2],
-        7: [0, 0],
-        8: [0, 1],
-        9: [0, 2],
-        'A': ['<', '^<<', '^<', '^', '^^<<', '^^<', '^^','^^^<<', '^^^<', '^^^', '']
-    }
+    dir_keypad = [
+        [None, '^', 'A'],
+        ['<', 'v', '>']
+    ]
 
-    def get_numpad_moves(f, t):
-        r_moves = numpad[t][0] - numpad[f][0]
-        c_moves = numpad[t][1] - numpad[f][1]
-        moves = []
+    result = 0
 
-        for _ in range(abs(r_moves)):
-            moves.append('^' if r_moves < 0 else 'v')
+    def precompute_keypad(keypad):
+        h, w = len(keypad), len(keypad[0])
 
-        for _ in range(abs(c_moves)):
-            moves.append('<' if c_moves < 0 else '>')
+        positions: dict[str, tuple[int, int]] = {}
+        for r in range(h):
+            for c in range(w):
+                if keypad[r][c]:
+                    positions[keypad[r][c]] = (r, c)
 
-        return moves + ["A"]
+        moves = defaultdict(list)
 
-    def get_dirpad_moves(f, t):
-        r_moves = dirpad[t][0] - dirpad[f][0]
-        c_moves = dirpad[t][1] - dirpad[f][1]
-        moves = []
+        for s in positions.keys():
+            for e in positions.keys():
+                if s == e:
+                    moves[(s, e)].append('A')
+                    continue
 
-        for _ in range(abs(r_moves)):
-            moves.append('^' if r_moves < 0 else 'v')
+                optimal = float('inf')
 
-        for _ in range(abs(c_moves)):
-            moves.append('<' if c_moves < 0 else '>')
+                q = deque([(positions[s], '')])
 
-        return moves + ["A"]
+                while q:
+                    (r, c), path = q.popleft()
 
-    # print(input_data)
+                    if len(path) > optimal:
+                        continue
 
-    inputs = [['A' if x == 'A' else int(x) for x in input] for input in input_data]
+                    if (r, c) == positions[e]:
+                        moves[(s, e)].append(path + 'A')
+                        optimal = min(optimal, len(path))
+                        continue
 
-    # print(inputs)
+                    for nr, nc, nv in ((r - 1, c, '^'), (r, c + 1, '>'), (r + 1, c, 'v'), (r, c - 1, '<')):
+                        if 0 <= nr < h and 0 <= nc < w and keypad[nr][nc]:
+                            q.append(((nr, nc), path + nv))
 
-    cur_num = 'A'
-    for line in inputs:
-        all_numpad_moves = []
-        print("line:", line)
-        for move in line:
-            all_numpad_moves += get_numpad_moves(cur_num, move)
-            cur_num = move
-        print(*all_numpad_moves, sep="")
+        return moves, positions
 
-        all_first_dirs = []
-        cur_dir = 'A'
-        for move in all_numpad_moves:
-            # print(move, get_dirpad_moves(cur_dir, move))
-            all_first_dirs += get_dirpad_moves(cur_dir, move)
-            cur_dir = move
-        print(*all_first_dirs, sep="")
-        #
-        all_second_dirs = []
-        # cur_dir = 'A'
-        for move in all_first_dirs:
-            print(cur_dir, move, get_dirpad_moves(cur_dir, move))
-            all_second_dirs += get_dirpad_moves(cur_dir, move)
-            cur_dir = move
+    num_moves, num_positions = precompute_keypad(num_keypad)
+    dir_moves, dir_positions = precompute_keypad(dir_keypad)
+    dir_lengths = {k: len(v[0]) for k, v in dir_moves.items()}
 
-        print(*all_second_dirs, sep="")
+    def solve(string, moves):
+        options = [moves[(a, b)] for a, b in zip("A" + string, string)]
+        return ["".join(x) for x in product(*options)]
 
-        print(len(all_second_dirs))
-        print("_____________")
+    @cache
+    def calculate_length(seq, depth=25):
+        if depth == 1:
+            return sum(dir_lengths[(a, b)] for a, b in zip('A' + seq, seq))
+        length = 0
+        for a, b in zip('A' + seq, seq):
+            length += min(calculate_length(sub_seq, depth - 1) for sub_seq in dir_moves[(a, b)])
+
+        return length
 
 
-    # cur_num = 'A'
-    # cur_dir = 'A'
-    # for line in inputs:
-    #     print("line:", line)
-    #     # # all_numpad_moves = []
-    #     for move in line:
-    #         numpad_moves = get_numpad_moves(cur_num, move)
-    #         print("numpad_moves:", numpad_moves)
-    #     #     # first_dir_moves = []
+    for line in input_data:
+        inputs = solve(line, num_moves)
+        length = min(map(calculate_length, inputs))
+        result += length * int(line[:-1])
 
-    #     #     for new_dir in numpad_moves:
-    #     #         dir_moves = get_dirpad_moves(cur_dir, new_dir)
-    #     #         print(new_dir, dir_moves)
-    #     #         #
-    #     #         #
-    #     #         cur_dir = new_dir
-
-    #         cur_num = move
-    #     print("new_line________")
+    return result
 
 
 
